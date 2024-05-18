@@ -120,7 +120,7 @@
           <ion-button  color="primary" (click)="printCountrie(order)">
             <ion-icon name="print-outline"></ion-icon>
           </ion-button>
-          <ion-button color="secondary" >
+          <ion-button color="secondary" [routerLink]="['/contrie',i]" >
             <ion-icon name="information-circle-outline"></ion-icon>
           </ion-button>
         </ion-buttons>
@@ -129,6 +129,25 @@
 
   </ion-list>
 
+    }
+
+    @else {
+      <ion-list-header class="ion-margin-bottom">
+        <ion-label>
+         الاصناف الاخيرة
+        </ion-label>
+        <ion-button fill="clear" size="small" color="medium">
+          <ion-text>
+            عرض الكل
+          </ion-text>
+        </ion-button>
+      </ion-list-header> 
+      <ion-content >
+ <h1>جاري تحميل البيانات</h1>
+        <ion-spinner name="dots" color="primary"></ion-spinner>
+      </ion-content>
+
+      
     }
   
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">

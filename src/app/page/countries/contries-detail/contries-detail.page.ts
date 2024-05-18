@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+
+import { IonBackButton, IonHeader, IonContent, IonToolbar, IonButtons,IonThumbnail, IonList, IonItem, IonLabel, IonChip, IonText, IonSegment, IonRow, IonSegmentButton, IonCol, IonFooter, IonButton, IonIcon } from '@ionic/angular/standalone';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -9,7 +8,7 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './contries-detail.page.html',
   styleUrls: ['./contries-detail.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
+  imports: [IonIcon, IonButton, IonFooter, IonCol, IonSegmentButton, IonRow, IonSegment, IonText, IonChip, IonLabel, IonItem, IonList, IonButtons, IonToolbar, IonContent, IonHeader, IonBackButton, IonThumbnail ]
 })
 export class ContriesDetailPage implements OnInit {
   id:any ;

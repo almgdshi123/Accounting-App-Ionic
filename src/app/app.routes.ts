@@ -15,7 +15,7 @@ export const routes: Routes = [
     loadComponent: () => import('./page/countries/countries.page').then( m => m.countriesPage)
   },
   {
-    path: 'contries/:id',
+    path: 'contrie/:id',
     loadComponent: () => import('./page/countries/contries-detail/contries-detail.page').then( m => m.ContriesDetailPage)
   }
   
