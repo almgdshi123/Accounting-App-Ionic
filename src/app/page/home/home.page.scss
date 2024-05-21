@@ -36,19 +36,11 @@ ion-button {
     transform: translateY(0px);
   }
 }
-.footer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  text-align: center;
-  padding: 10px;  
-}
+
 
 .footer-text {
-  font-size: 12px;
+  text-align: center;
+
   color: #666;
 }
 .footer-text a {
@@ -56,5 +48,12 @@ ion-button {
   text-decoration: none;
   font-weight: bold;
 }
-
+ion-footer {
+  display: block;
+  // position: relative;
+  -ms-flex-order: 1;
+  order: 1;
+  width: 100%;
+  z-index: 10;
+}
 

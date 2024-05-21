@@ -97,35 +97,37 @@
 
    
       
-    
-      <ion-item *ngFor="let item of CountrieList; let i = index" class="ion-margin-bottom" >
+    @for (item of CountrieList; track $index) {
+      
+      <ion-item  class="ion-margin-bottom" >
        
         <ion-label class="recent">
           {{item}}
           <p>
           
          رقم  
-        : {{i}}
+        : {{$index}}
 
         
           </p>
         </ion-label>
         <ion-buttons   slot="end" >
-          <ion-button color="warning" (click)="editCountrie(i,item)">
+          <ion-button color="warning" (click)="editCountrie($index,item)">
             <ion-icon name="create-outline" ></ion-icon>
           </ion-button>
-          <ion-button color="danger" (click)="deleteCountrie(i,item)" >
+          <ion-button color="danger" (click)="deleteCountrie($index,item)" >
             <ion-icon name="trash-outline" ></ion-icon>
           </ion-button>
           <ion-button  color="primary" (click)="printCountrie(order)">
             <ion-icon name="print-outline"></ion-icon>
           </ion-button>
-          <ion-button color="secondary" [routerLink]="['/contrie',i]" >
+          <ion-button color="secondary" [routerLink]="['/contrie',$index]" >
             <ion-icon name="information-circle-outline"></ion-icon>
           </ion-button>
         </ion-buttons>
       </ion-item>
-    
+    }
+   
 
   </ion-list>
 

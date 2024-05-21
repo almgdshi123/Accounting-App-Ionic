@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { delay, Observable } from 'rxjs';
 const url='https://weatherforecastapitest.azurewebsites.net/WeatherForecast';
 @Injectable({
   providedIn: 'root'
@@ -12,6 +12,7 @@ export class CountriesService {
   }
   getCountries():Observable<any>{
     const ruselt= this.https.get(url); 
+
     return(ruselt);
 
   }

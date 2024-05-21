@@ -17,15 +17,19 @@ export const routes: Routes = [
   {
     path: 'contrie/:id',
     loadComponent: () => import('./page/countries/contries-detail/contries-detail.page').then( m => m.ContriesDetailPage)
-  }
+  },
   
-,  {
+  {
+    path: 'login',
+    loadComponent: () => import('./page/account/login/login.page').then( m => m.LoginPage)
+  },
+    {
     path: '404',
     loadComponent: () => import('./page/error-page/error-page.page').then( m => m.ErrorPagePage)
   },
   {
     path: '**',
     redirectTo: '404'
-  },
+  }
 
 ];
