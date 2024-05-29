@@ -1,15 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-const baseUrl = 'http://desktop-tcq1ieo:8024/api/';
+import { environment } from 'src/environments/environment';
+
 @Injectable({
   providedIn: 'root',
 })
 export class ApiProviderService {
+  baseUrl='https://weatherforecastapitest.azurewebsites.net/';
   constructor(private https: HttpClient) {}
 
   getData(url) {
     return new Promise((resolve, reject) => {
-      this.https.get(baseUrl + url).subscribe(
+      this.https.get(this.baseUrl + url).subscribe(
         (res) => {
           resolve(res);
         },
@@ -23,55 +25,55 @@ export class ApiProviderService {
 
   getListAsString(url) {
     return new Promise((resolve, reject) => {
-      this.https.get(baseUrl + url).subscribe(
+      this.https.get(this.baseUrl + url).subscribe(
         (res) => {
           resolve(res);
         },
         (error) => {
           console.error(error); // Use console.error for errors
           reject(error);
-        } 
+        }
       );
-    }); 
+    });
   }
 
   postDataList(content, url) {
     return new Promise((resolve, reject) => {
-      this.https.post(baseUrl + url, content).subscribe(
+      this.https.post(this.baseUrl + url, content).subscribe(
         (res) => {
           resolve(res);
         },
         (error) => {
           console.error(error); // Use console.error for errors
           reject(error);
-        } 
+        }
       );
     });
   }
   deleteData(url) {
     return new Promise((resolve, reject) => {
-      this.https.delete(baseUrl + url).subscribe((res) => {
-        resolve(res);
-      },
-      (error) => {
-        console.error(error); // Use console.error for errors
-        reject(error);
-      } ); 
-      });
+      this.https.delete(this.baseUrl + url).subscribe(
+        (res) => {
+          resolve(res);
+        },
+        (error) => {
+          console.error(error); // Use console.error for errors
+          reject(error);
+        }
+      );
+    });
   }
-  postData(content,url){
+  postData(content, url) {
     return new Promise((resolve, reject) => {
-      this.https.post(baseUrl + url, content).subscribe((res) => {
-        resolve(res);
-      },
-      (error) => {
-        console.error(error); // Use console.error for errors
-        reject(error);
-      } );  
-    })  }
-    
-
-  
-
-  
+      this.https.post(this.baseUrl + url, content).subscribe(
+        (res) => {
+          resolve(res);
+        },
+        (error) => {
+          console.error(error); // Use console.error for errors
+          reject(error);
+        }
+      );
+    });
+  }
 }

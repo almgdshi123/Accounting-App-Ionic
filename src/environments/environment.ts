@@ -3,7 +3,12 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+
+ 
+
+  // apiUrl: 'http://desktop-tcq1ieo:8024/api/'
+  apiUrl:'https://weatherforecastapitest.azurewebsites.net/'
 };
 
 /*

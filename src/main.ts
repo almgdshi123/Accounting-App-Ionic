@@ -2,6 +2,7 @@ import { enableProdMode } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { RouteReuseStrategy, provideRouter } from '@angular/router';
 import { IonicRouteStrategy, provideIonicAngular } from '@ionic/angular/standalone';
+import { JwtHelperService, JWT_OPTIONS  } from '@auth0/angular-jwt';
 
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
@@ -19,6 +20,8 @@ bootstrapApplication(AppComponent, {
     provideIonicAngular(),
     provideRouter(routes),
     provideHttpClient(),
+    { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
+    JwtHelperService,
     PDFGenerator
   ],
 });

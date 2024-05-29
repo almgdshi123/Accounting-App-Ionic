@@ -6,6 +6,7 @@ import { IonHeader, IonToolbar, IonTitle, IonContent,IonNav, IonImg, IonButton, 
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
   standalone: true,
+  
   imports: [IonFooter, IonFab, IonButtons, IonButton, IonImg, IonHeader, IonToolbar, IonTitle, IonContent,IonNav,IonButton,IonMenuButton],
 })
 export class HomePage {

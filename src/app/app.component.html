@@ -5,8 +5,8 @@
       <div class="header-content">
         <img src="../assets/img/user_12749004.png" alt="" />
         <ion-label>
-          <h2>م/المقدشي عبدالمغني</h2>
-          <p>`مهندس برمجيات</p>
+          <h2> {{userName}}</h2>
+          <p>` مدير النظام</p>
         </ion-label>
       </div>
 
@@ -34,7 +34,8 @@
           <ion-icon name="construct-outline"></ion-icon>النسخ الاحتياطي
         </ion-item>
 
-        <ion-item>
+        <ion-item (click)="logout()" >
+
           <ion-icon name="exit-outline"></ion-icon> تسجيل الخروج
         </ion-item>
       </ion-list>
