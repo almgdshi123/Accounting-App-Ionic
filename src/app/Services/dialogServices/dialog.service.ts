@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AlertController, LoadingController } from '@ionic/angular/standalone';
+import { AlertController, LoadingController,MenuController } from '@ionic/angular/standalone';
 
 @Injectable({
   providedIn: 'root'
@@ -7,7 +7,7 @@ import { AlertController, LoadingController } from '@ionic/angular/standalone';
 export class DialogService {
   loading: HTMLIonLoadingElement;
 
-  constructor(private alertCtrl: AlertController, private loadingController: LoadingController) {}
+  constructor(private alertCtrl: AlertController, private loadingController: LoadingController,private menu: MenuController) {}
 
   async alertShowSuccess(title: string, message: string) {
     const alert = await this.alertCtrl.create({
@@ -41,4 +41,11 @@ export class DialogService {
       await this.loading.dismiss();
     }
   }
+  async enableMenu(bool: boolean) {
+    await this.menu.enable(bool);
+  }
+
+    async closeMenu() {
+      await this.menu.close();
+    }
 }

@@ -21,18 +21,14 @@
           <ion-icon name="pie-chart-outline" [routerLink]="['/home']" routerLinkActive="active"></ion-icon>لوحة التحكم
         </ion-item>
         <ion-item>
-          <ion-icon name="newspaper-outline"></ion-icon>التقارير
+          <ion-icon name="archive-outline" [routerLink]="['/store']" routerLinkActive="active"></ion-icon>
+          نظام المخزون 
         </ion-item>
-        <ion-item  [routerLink]="['/weather']" routerLinkActive="active">
+        <!-- <ion-item  [routerLink]="['/weather']" routerLinkActive="active">
           <ion-icon name="browsers-outline" ></ion-icon> ارسال البيانات الى
           السرفر
         </ion-item>
-        <ion-item>
-          <ion-icon name="server-outline"></ion-icon>حفظ الى قاعدة البيانات
-        </ion-item>
-        <ion-item>
-          <ion-icon name="construct-outline"></ion-icon>النسخ الاحتياطي
-        </ion-item>
+       -->
 
         <ion-item (click)="logout()" >
 

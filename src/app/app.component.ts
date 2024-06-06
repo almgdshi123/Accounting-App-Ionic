@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonApp, IonRouterOutlet,IonMenu, IonContent, IonLabel, IonButton, IonIcon, IonList, IonItem, IonFooter } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { cloudDoneOutline ,pieChartOutline ,newspaperOutline,browsersOutline,serverOutline,constructOutline,exitOutline, logOut, } from 'ionicons/icons';
+import {  pieChartOutline,exitOutline,cloudDoneOutline ,archiveOutline } from 'ionicons/icons';
 import {  RouterModule } from '@angular/router';
 import { AuthenticationService } from './Services/account/authentication.service';
 
@@ -16,12 +16,9 @@ export class AppComponent {
   userName=this.auth.username;
   constructor(private auth: AuthenticationService) {
     addIcons({
-      cloudDoneOutline,
       pieChartOutline,
-      newspaperOutline,
-      browsersOutline,
-      serverOutline,
-      constructOutline,
+      cloudDoneOutline,
+      archiveOutline,
       exitOutline
     });
 

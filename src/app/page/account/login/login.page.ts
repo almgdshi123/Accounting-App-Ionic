@@ -52,15 +52,15 @@ export class LoginPage implements OnInit {
 
   constructor(
     private auth: AuthenticationService,
-    private menu: MenuController,
     private dialog: DialogService
   ) {}
 
   ngOnInit() {
-    this.menu.enable(false);
+     this.dialog.enableMenu(false);
     if (this.auth.isAuthenticated()) {
       this.auth.redirectTo('/home');
-      this.menu.enable(true);
+      this.dialog.enableMenu(true);
+    
       this.dialog.alertShowSuccess('مرحبا', 'تم تسجيل الدخول بنجاح');
     }
 
@@ -77,7 +77,7 @@ export class LoginPage implements OnInit {
       this.auth.userLogin(data).then(() => {
         if(this.auth.isAuthenticated()){
           this.auth.redirectTo('/home');
-          this.menu.enable(true);
+          this.dialog.enableMenu(true);
           this.dialog.hideLoading();
           this.dialog.alertShowSuccess('مرحبا', 'تم تسجيل الدخول بنجاح');
         }else{
