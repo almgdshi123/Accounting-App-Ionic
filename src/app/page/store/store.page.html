@@ -3,40 +3,41 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title  color="primary">ادرة المخزون </ion-title>
+    <ion-title color="primary">ادرة المخزون </ion-title>
     <div slot="end" class="ion-header-icon">
-      <ion-icon  color="primary" name="archive"></ion-icon>
+      <ion-icon color="primary" name="archive"></ion-icon>
     </div>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-    
-  
- 
-  <ion-grid >
+  <ion-grid>
     <ion-row class="tagline">
       <ion-col>
-        <ion-label >
-          <h2 >
-            <ion-text color="danger"  > المدخلات</ion-text>
+        <ion-label>
+          <h2>
+            <ion-text color="danger"> المدخلات</ion-text>
           </h2>
         </ion-label>
       </ion-col>
     </ion-row>
-    <ion-row class="ion-text-center" >
-      
-      <ion-col size="6" routerLink="/page1" >
-        <ion-icon name="documents-outline" color="success" size="large"></ion-icon>
-        <p  >المجموعات المخزنية</p>
+    <ion-row class="ion-text-center">
+      <ion-col size="6"  [routerLink]="['/store/item-group']">
+        <ion-icon
+          name="documents-outline"
+          color="success"
+          size="large"
+        ></ion-icon>
+        <p>المجموعات المخزنية</p>
       </ion-col>
 
-   
-
       <ion-col size="6" routerLink="/page3">
-        
-        <ion-icon name="desktop-outline" color="success" size="large"></ion-icon>
-        <p> بيانات الاصناف</p>
+        <ion-icon
+          name="desktop-outline"
+          color="success"
+          size="large"
+        ></ion-icon>
+        <p>بيانات الاصناف</p>
       </ion-col>
     </ion-row>
   </ion-grid>

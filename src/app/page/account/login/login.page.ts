@@ -56,35 +56,36 @@ export class LoginPage implements OnInit {
   ) {}
 
   ngOnInit() {
-     this.dialog.enableMenu(false);
+    this.dialog.enableMenu(false);
+    this.dialog.closeMenu();
     if (this.auth.isAuthenticated()) {
       this.auth.redirectTo('/home');
       this.dialog.enableMenu(true);
-    
+
       this.dialog.alertShowSuccess('مرحبا', 'تم تسجيل الدخول بنجاح');
     }
-
   }
 
   login() {
     if (this.loginFormGroup.valid) {
-      const data = {
-        username: this.loginFormGroup.value.UName,
-        password: this.loginFormGroup.value.UPsd,
-      };
       this.dialog.showLoading('جاري تسجيل الدخول...');
 
-      this.auth.userLogin(data).then(() => {
-        if(this.auth.isAuthenticated()){
-          this.auth.redirectTo('/home');
-          this.dialog.enableMenu(true);
-          this.dialog.hideLoading();
-          this.dialog.alertShowSuccess('مرحبا', 'تم تسجيل الدخول بنجاح');
-        }else{
-          this.dialog.hideLoading();
-          this.dialog.alertShowError('خطاء', 'خطأ في اسم المستخدم او كلمة المرور');
-        }
-      });
+      const response = this.auth
+        .userLogin(this.loginFormGroup.value)
+        .then(() => {
+          if (this.auth.isAuthenticated()) {
+            this.auth.redirectTo('/home');
+            this.dialog.enableMenu(true);
+            this.dialog.hideLoading();
+            this.dialog.alertShowSuccess('مرحبا', 'تم تسجيل الدخول بنجاح');
+          } else {
+            this.dialog.hideLoading();
+            this.dialog.alertShowError(
+              'خطاء',
+              'خطأ في اسم المستخدم او كلمة المرور'
+            );
+          }
+        });
     } else {
       this.loginFormGroup.markAllAsTouched();
     }

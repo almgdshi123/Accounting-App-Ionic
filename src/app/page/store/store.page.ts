@@ -11,6 +11,7 @@ import {
   IonTitle,
   IonToolbar,
   IonButtons, IonIcon, IonCol, IonRow, IonGrid, IonLabel, IonText } from '@ionic/angular/standalone';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-store',
@@ -26,6 +27,8 @@ import {
     IonToolbar,
     CommonModule,
     FormsModule,
+    RouterModule
+    
   ],
 })
 export class StorePage implements OnInit {

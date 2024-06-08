@@ -1,12 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiProviderService {
-  baseUrl='https://weatherforecastapitest.azurewebsites.net/';
+  baseUrl='https://erpapi.litesoftit.com/';
   constructor(private https: HttpClient) {}
 
   getData(url) {

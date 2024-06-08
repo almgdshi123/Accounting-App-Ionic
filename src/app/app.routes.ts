@@ -1,12 +1,11 @@
 import { Routes } from '@angular/router';
 import { authenticationGuard } from './Services/account/authentication.guard';
-import { dialogGuard } from './Services/dialogServices/dialog.guard';
 
 export const routes: Routes = [
   {
     path: 'home',
     loadComponent: () => import('./page/home/home.page').then((m) => m.HomePage),
-    canActivate:[authenticationGuard,dialogGuard]
+    canActivate:[authenticationGuard]
   },
   {
     path: '',
@@ -16,7 +15,7 @@ export const routes: Routes = [
   {
     path: 'weather',
     loadComponent: () => import('./page/countries/countries.page').then( m => m.countriesPage)
-   , canActivate:[authenticationGuard,dialogGuard]
+   , canActivate:[authenticationGuard]
 
   },
   {
@@ -31,7 +30,7 @@ export const routes: Routes = [
   {
     path:'store',
     loadChildren:()=> import('./page/store/store.routes').then(m =>m.routes),
-    canActivate:[authenticationGuard,dialogGuard]
+    canActivate:[authenticationGuard]
 
   }
   ,

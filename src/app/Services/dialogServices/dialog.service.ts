@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AlertController, LoadingController,MenuController } from '@ionic/angular/standalone';
+import { ServerResponse } from 'src/app/Models/Model';
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +29,8 @@ export class DialogService {
     });
     await alert.present();
   }
+
+  
   
   async showLoading(message: string = 'جاري التحميل...') {
     this.loading = await this.loadingController.create({
@@ -35,6 +38,7 @@ export class DialogService {
     });
     await this.loading.present();
   }
+
 
   async hideLoading() {
     if (this.loading) {
@@ -48,4 +52,5 @@ export class DialogService {
     async closeMenu() {
       await this.menu.close();
     }
+    
 }

@@ -23,10 +23,10 @@ export class AuthenticationService {
 
   async userLogin(request: any) {
    await this.apiProvider
-      .postData(request, 'api/Auth/login')
+      .postData(request, 'api/LoginApi/Authenticate')
       .then((response: any) => {
-        if (response?.token != null) {
-          localStorage.setItem(ELookup.TOKEN_NAME, response?.token);
+        if (response?.Data != null) {
+          localStorage.setItem(ELookup.TOKEN_NAME, response?.Data);
         }
      
       })
