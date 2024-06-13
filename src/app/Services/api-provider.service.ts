@@ -36,7 +36,7 @@ export class ApiProviderService {
     });
   }
 
-  postDataList(content, url) {
+  postDataList( url,content) {
     return new Promise((resolve, reject) => {
       this.https.post(this.baseUrl + url, content).subscribe(
         (res) => {
@@ -62,7 +62,7 @@ export class ApiProviderService {
       );
     });
   }
-  postData(content, url) {
+  postData( url, content) {
     return new Promise((resolve, reject) => {
       this.https.post(this.baseUrl + url, content).subscribe(
         (res) => {

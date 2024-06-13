@@ -19,21 +19,21 @@
 
   <ion-item
     class="ion-margin-bottom"
-    *ngFor="let item of itemGroup; let i = index"
+    *ngFor="let item of itemGroups; let i = index"
   >
   <ion-grid>
     <ion-row>
       <ion-col size="6" size-sm="6">
         <ion-label class="recent">
           <ion-chip color="success"> {{i + 1}} </ion-chip>
-          {{item?.Name}}
+          {{item.Name}}
         </ion-label>
       </ion-col>
       <ion-col size="6" size-sm="6">
         <ion-label class="recent">
           <p>
             رقم المجموعة :
-            <ion-chip color="tertiary"> {{item?.Id}} </ion-chip>
+            <ion-chip color="tertiary"> {{item.Id}} </ion-chip>
           </p>
         </ion-label>
       </ion-col>
@@ -41,12 +41,8 @@
     <ion-row>
       <ion-col size="12">
         <ion-buttons class="ion-justify-content-end">
-          <ion-button color="secondary">
-            <ion-icon name="information-circle-outline"></ion-icon>
-          </ion-button>
-          <ion-button color="warning">
-            <ion-icon name="create-outline"></ion-icon>
-          </ion-button>
+         
+          
           <ion-button color="danger">
             <ion-icon name="trash-outline"></ion-icon>
           </ion-button>
@@ -65,7 +61,7 @@
   </ion-item>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button>
+    <ion-fab-button (click)="openPage()" >
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
@@ -84,34 +80,41 @@
             >
           </ion-buttons>
         </ion-toolbar>
+        <ion-chip color="primary">
+        <ion-card-subtitle color="primary" >  {{itemGroup.Name}}</ion-card-subtitle>
+        </ion-chip>
       </ion-header>
       <ion-content>
+
         <ion-list>
+
+
           <ion-item>
             <ion-label>
-              <ion-checkbox [(ngModel)]="isExpire">
+              <ion-toggle  [checked]="itemGroup.IsExpire">
                 <h2>استخدام تاريخ الانتهاء</h2>
-              </ion-checkbox>
+              </ion-toggle>
             </ion-label>
           </ion-item>
           <ion-item>
             <ion-label>
               <ion-label>
-                <ion-checkbox [(ngModel)]="allowNeg">
-                  <h2>السماح بلكميات السالبة</h2></ion-checkbox
+                <ion-toggle  [checked]="itemGroup.AllowNeg">
+                  <h2>السماح بلكميات السالبة</h2></ion-toggle
                 >
               </ion-label>
             </ion-label>
           </ion-item>
           <ion-item>
             <ion-label>
-              <ion-checkbox [(ngModel)]="costLessSale">
+              <ion-toggle  [checked]="itemGroup.CostLessSale">
                 <h2>البيع باقل من التكلفة</h2>
-              </ion-checkbox>
+              </ion-toggle>
             </ion-label>
           </ion-item>
         </ion-list>
       </ion-content>
     </ng-template>
   </ion-modal>
+  
 </ion-content>

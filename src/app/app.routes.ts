@@ -29,19 +29,16 @@ export const routes: Routes = [
   },
   {
     path:'store',
+
     loadChildren:()=> import('./page/store/store.routes').then(m =>m.routes),
     canActivate:[authenticationGuard]
 
+
+
   }
-  ,
-    {
-    path: '404',
-    loadComponent: () => import('./page/error-page/error-page.page').then( m => m.ErrorPagePage)
-  },
-  {
-    path: '**',
-    redirectTo: '404'
-  },
+  
+
+
  
  
 

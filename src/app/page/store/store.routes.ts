@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { dialogGuard } from 'src/app/Services/dialogServices/dialog.guard';
 
 export const routes: Routes = [
   {
@@ -9,9 +10,17 @@ export const routes: Routes = [
   {
     path: 'main',
     loadComponent: () => import('./store.page').then((m) => m.StorePage),
-  },  {
-    path: 'item-group',
+  },
+  {
+    path: 'itemGroup',
     loadComponent: () => import('./item-group/item-group.page').then( m => m.ItemGroupPage)
   },
+  {
+    path: 'itemGroup/operationsPage',
+    loadComponent: () => import('./item-group/operations-page/operations-page.page').then( m => m.OperationsPagePage),
+    canActivate:[dialogGuard]
+
+  },
+
 
 ];

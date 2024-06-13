@@ -26,7 +26,11 @@ import {
   IonAvatar,
   IonImg,
   IonSearchbar,
-  IonCheckbox, IonAlert, IonGrid } from '@ionic/angular/standalone';
+  IonAlert,
+  IonGrid,
+  IonCardSubtitle,
+  IonToggle,
+} from '@ionic/angular/standalone';
 import { ApiProviderService } from 'src/app/Services/api-provider.service';
 import { addIcons } from 'ionicons';
 import {
@@ -39,16 +43,24 @@ import {
   settings,
 } from 'ionicons/icons';
 import { DialogService } from 'src/app/Services/dialogServices/dialog.service';
+import { OperationsPage } from 'src/app/enum/ELookup';
+import { Router, RouterModule } from '@angular/router';
+import { ItemGroupModel } from 'src/app/Models/StoreModel';
+import { DataService } from 'src/app/Services/dialogServices/data.service';
+import { ProcesseProviderService } from 'src/app/Services/processe-provider.service';
 
 @Component({
   selector: 'app-item-group',
   templateUrl: './item-group.page.html',
-  styleUrls: ['./item-group.page.scss'],
   standalone: true,
-  imports: [IonGrid, IonAlert, 
-    IonCheckbox,
+  imports: [
+    IonToggle,
+    IonCardSubtitle,
+    IonGrid,
+    IonAlert,
     IonSearchbar,
     IonImg,
+    RouterModule,
     IonAvatar,
     IonModal,
     IonFab,
@@ -77,13 +89,22 @@ import { DialogService } from 'src/app/Services/dialogServices/dialog.service';
 export class ItemGroupPage implements OnInit {
   @ViewChild(IonModal, { static: true }) modal: IonModal;
 
-  itemGroup: any;
+  itemGroups: ItemGroupModel[];
+  itemGroup: ItemGroupModel;
+  ElookupItemGroup: { Name: string; Id: string }[] = [];
   data: any;
   isExpire: boolean = false;
   allowNeg: boolean = true;
   costLessSale: boolean = false;
 
-  constructor(private api: ApiProviderService, private dialog: DialogService, private  alertCrtl: AlertController) {
+  page = OperationsPage;
+
+  constructor(
+    private alertCrtl: AlertController,
+    private router: Router,
+    private dataService: DataService,
+    private processe: ProcesseProviderService
+  ) {
     addIcons({
       add: add,
       document: document,
@@ -96,57 +117,57 @@ export class ItemGroupPage implements OnInit {
   }
 
   ngOnInit() {
+  }
+  ionViewDidEnter() {
     this.getItemGroup();
   }
 
 
   getItemGroup() {
-    this.dialog.showLoading();
-    this.api
-      .getData('api/ItemGroupApi/GetAll')
-      .then((data) => {
-        this.data = data;
+    this.processe.getListAsString('api/ItemGroupApi/GetAll').then((res) => {
+      this.itemGroups = res;
 
-        this.itemGroup = this.data.Data;
+    });
 
-        this.dialog.hideLoading();
-      })
-      .catch(() => {
-        this.dialog.alertShowError('خطأ', '  تاكد من اتصالك بالانترنت');
-        this.dialog.hideLoading();
-      });
   }
-  async openModal(item: any) {
-    // استبدل بمكون المودال الخاص بك
+  async openModal(item: ItemGroupModel) {
+    this.itemGroup = item;
 
-    this.isExpire = item?.IsExpire;
-    this.allowNeg = item?.AllowNeg;
-    this.costLessSale = item?.CostLessSale;
     this.modal.present();
   }
 
   SettingsSave() {
-    this.alertCrtl.create({
-      header: 'تنبيه',
-      cssClass: 'error-alert',
-      message: 'هل تريد تغيير الاعدادات؟',
-      buttons: [
-        {
-          text: 'لا',
-          role: 'cancel',
-          handler: (blah) => {
-            console.log('Confirm Cancel: blah');
+    this.alertCrtl
+      .create({
+        header: 'تنبيه',
+        cssClass: 'error-alert',
+        message: 'هل تريد تغيير الاعدادات؟',
+        buttons: [
+          {
+            text: 'لا',
+            role: 'cancel',
+            handler: (blah) => {
+              console.log('Confirm Cancel: blah');
+            },
           },
-        },
-        {
-        text: 'نعم',},
-      ],
-    }).then((alert) => {
-      alert.present();
+          {
+            text: 'نعم',
+          },
+        ],
+      })
+      .then((alert) => {
+        alert.present();
+      });
+    this.modal.dismiss();
+  }
+  openPage() {
+    this.ElookupItemGroup = [];
+    this.itemGroups.forEach((element) => {
+      this.ElookupItemGroup.push({ Name: element.Name, Id: element.Id });
     });
-    this.modal.dismiss(
-    )
-    
-    
+
+    this.dataService.setData(this.ElookupItemGroup);
+
+    this.router.navigate(['store/itemGroup/operationsPage']);
   }
 }
