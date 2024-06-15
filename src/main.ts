@@ -1,8 +1,11 @@
 import { enableProdMode } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { RouteReuseStrategy, provideRouter } from '@angular/router';
-import { IonicRouteStrategy, provideIonicAngular } from '@ionic/angular/standalone';
-import { JwtHelperService, JWT_OPTIONS  } from '@auth0/angular-jwt';
+import {
+  IonicRouteStrategy,
+  provideIonicAngular,
+} from '@ionic/angular/standalone';
+import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
 
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
@@ -17,11 +20,15 @@ if (environment.production) {
 bootstrapApplication(AppComponent, {
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    provideIonicAngular(),
+    provideIonicAngular({
+      rippleEffect: false,
+      mode: 'ios',
+    }),
     provideRouter(routes),
     provideHttpClient(),
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
     JwtHelperService,
-    PDFGenerator
+
+    PDFGenerator,
   ],
 });

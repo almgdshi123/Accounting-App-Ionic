@@ -5,7 +5,6 @@ import {
   IonContent,
   IonHeader,
   IonTitle,
-  AlertController,
   IonToolbar,
   IonIcon,
   IonButtons,
@@ -28,10 +27,8 @@ import {
   IonSearchbar,
   IonAlert,
   IonGrid,
-  IonCardSubtitle,
   IonToggle,
 } from '@ionic/angular/standalone';
-import { ApiProviderService } from 'src/app/Services/api-provider.service';
 import { addIcons } from 'ionicons';
 import {
   add,
@@ -42,20 +39,19 @@ import {
   informationCircleOutline,
   settings,
 } from 'ionicons/icons';
-import { DialogService } from 'src/app/Services/dialogServices/dialog.service';
 import { OperationsPage } from 'src/app/enum/ELookup';
 import { Router, RouterModule } from '@angular/router';
 import { ItemGroupModel } from 'src/app/Models/StoreModel';
 import { DataService } from 'src/app/Services/dialogServices/data.service';
 import { ProcesseProviderService } from 'src/app/Services/processe-provider.service';
-
+import { UpdateDataAlertService } from 'src/app/Services/dialogServices/update-data-alert.service';
+import { Tarmeez } from '../../../../app/enum/ELookup';
 @Component({
   selector: 'app-item-group',
   templateUrl: './item-group.page.html',
   standalone: true,
   imports: [
     IonToggle,
-    IonCardSubtitle,
     IonGrid,
     IonAlert,
     IonSearchbar,
@@ -92,6 +88,9 @@ export class ItemGroupPage implements OnInit {
   itemGroups: ItemGroupModel[];
   itemGroup: ItemGroupModel;
   ElookupItemGroup: { Name: string; Id: string }[] = [];
+  ElookupCurrency: { Name: string; Id: string }[] = [];
+  ElookupTarmeez: { Name: string; ItemNo: number }[] = [];
+
   data: any;
   isExpire: boolean = false;
   allowNeg: boolean = true;
@@ -100,7 +99,7 @@ export class ItemGroupPage implements OnInit {
   page = OperationsPage;
 
   constructor(
-    private alertCrtl: AlertController,
+    private updateDataAlert: UpdateDataAlertService,
     private router: Router,
     private dataService: DataService,
     private processe: ProcesseProviderService
@@ -116,57 +115,92 @@ export class ItemGroupPage implements OnInit {
     });
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
   ionViewDidEnter() {
     this.getItemGroup();
   }
 
+   async getItemGroup() {
+    const res = await this.processe.getListAsString('api/ItemGroupApi/GetAll');
+    this.itemGroups = res;
+    this.getElookup();
+  }
+  async getElookup() {
+    this.ElookupItemGroup = [];
 
-  getItemGroup() {
-    this.processe.getListAsString('api/ItemGroupApi/GetAll').then((res) => {
-      this.itemGroups = res;
+    if (this.itemGroups) {
+      this.ElookupItemGroup = this.itemGroups.map((element) => ({
+        Name: element.Name,
+        Id: element.Id,
+      }));
 
-    });
+      if (this.ElookupCurrency.length === 0) {
+        const currencyData = await this.processe.getListAsString(
+          'api/CurrencyApi/GetAll'
+        );
+        this.ElookupCurrency = currencyData.map((item) => ({
+          Name: item.Name,
+          Id: item.Id,
+        }));
+      }
 
+      if (this.ElookupTarmeez.length === 0) {
+        const tarmeezData = await this.processe.getByRequireList(
+          'api/TarmeezApi/GetTarmeezByGroupAndRequireList',
+          Tarmeez
+        );
+        this.ElookupTarmeez = tarmeezData.map((item) => ({
+          Name: item.Name,
+          ItemNo: item.ItemNo,
+        }));
+      }
+    }
   }
   async openModal(item: ItemGroupModel) {
     this.itemGroup = item;
+    this.itemGroup.OldId = this.itemGroup.Id;
 
     this.modal.present();
   }
+  async UpdateData(title) {
+    let res = '';
+    switch (title) {
+      case 'Name':
+        this.updateDataAlert
+          .updateData('    تعديل اسم المجموعة', this.itemGroup.Name)
+          .then((res) => {
+            if (res) this.itemGroup.Name = res;
+          });
+        break;
+
+      case 'Sort':
+        this.updateDataAlert
+          .updateData('    تعديل ترتيب المجموعة', this.itemGroup.Sort)
+          .then((res) => {
+            if (res) this.itemGroup.Sort = res;
+          });
+        break;
+    }
+  }
 
   SettingsSave() {
-    this.alertCrtl
-      .create({
-        header: 'تنبيه',
-        cssClass: 'error-alert',
-        message: 'هل تريد تغيير الاعدادات؟',
-        buttons: [
-          {
-            text: 'لا',
-            role: 'cancel',
-            handler: (blah) => {
-              console.log('Confirm Cancel: blah');
-            },
-          },
-          {
-            text: 'نعم',
-          },
-        ],
-      })
-      .then((alert) => {
-        alert.present();
-      });
+    this.updateDataAlert.settingsSave().then((res) => {
+      if (res)
+        this.processe
+          .edit('api/ItemGroupApi/Update', this.itemGroup, 'تم التعديل بنجاح')
+          .then((res) => {
+            if (res) this.getItemGroup();
+          });
+    });
+
     this.modal.dismiss();
   }
   openPage() {
-    this.ElookupItemGroup = [];
-    this.itemGroups.forEach((element) => {
-      this.ElookupItemGroup.push({ Name: element.Name, Id: element.Id });
+    this.dataService.setData({
+      ItemGroup: this.ElookupItemGroup,
+      Currency: this.ElookupCurrency,
+      Tarmeez: this.ElookupTarmeez,
     });
-
-    this.dataService.setData(this.ElookupItemGroup);
 
     this.router.navigate(['store/itemGroup/operationsPage']);
   }

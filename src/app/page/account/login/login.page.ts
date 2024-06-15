@@ -13,6 +13,7 @@ import {
   IonAvatar,
   IonItem,
   IonButton,
+  MenuController,
   IonInput,
   IonFooter,
   IonToolbar,

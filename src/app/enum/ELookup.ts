@@ -15,3 +15,19 @@ export const OperationsPage = {
   EditPage: 'edit',
   Detail: 'detail',
 };
+export const Tarmeez = {
+  RequiredList: [
+    { Id: 4 },
+    { Id: 7 },
+    { Id: 10 },
+    { Id: 11 },
+    { Id: 12 },
+    { Id: 14 },
+    { Id: 15 },
+    { Id: 16 },
+    { Id: 17 },
+    { Id: 18 },
+  ],
+  GroupNo: 3,
+  Process: 10,
+};

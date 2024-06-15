@@ -1,5 +1,8 @@
 {
   "name": "AppLiteSoft",
+  "ionic": {
+    "mode": "ios"
+  },
   "integrations": {
     "capacitor": {}
   },

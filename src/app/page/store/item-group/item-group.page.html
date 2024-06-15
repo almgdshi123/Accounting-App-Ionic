@@ -21,47 +21,44 @@
     class="ion-margin-bottom"
     *ngFor="let item of itemGroups; let i = index"
   >
-  <ion-grid>
-    <ion-row>
-      <ion-col size="6" size-sm="6">
-        <ion-label class="recent">
-          <ion-chip color="success"> {{i + 1}} </ion-chip>
-          {{item.Name}}
-        </ion-label>
-      </ion-col>
-      <ion-col size="6" size-sm="6">
-        <ion-label class="recent">
-          <p>
-            رقم المجموعة :
-            <ion-chip color="tertiary"> {{item.Id}} </ion-chip>
-          </p>
-        </ion-label>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size="12">
-        <ion-buttons class="ion-justify-content-end">
-         
-          
-          <ion-button color="danger">
-            <ion-icon name="trash-outline"></ion-icon>
-          </ion-button>
-          <ion-button
-            id="open-modal"
-            color="medium"
-            (click)="openModal(item)"
-          >
-            <ion-icon name="settings"></ion-icon>
-          </ion-button>
-        </ion-buttons>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-  
+    <ion-grid>
+      <ion-row>
+        <ion-col size="6" size-sm="6">
+          <ion-label class="recent">
+            <ion-chip color="success"> {{i + 1}} </ion-chip>
+            {{item.Name}}
+          </ion-label>
+        </ion-col>
+        <ion-col size="6" size-sm="6">
+          <ion-label class="recent">
+            <p>
+              رقم المجموعة :
+              <ion-chip color="tertiary"> {{item.Id}} </ion-chip>
+            </p>
+          </ion-label>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12" class="ion-text-center">
+          <ion-buttons class="ion-justify-content-center">
+            <ion-button color="danger">
+              <ion-icon name="trash-outline"></ion-icon>
+            </ion-button>
+            <ion-button
+              id="open-modal"
+              color="medium"
+              (click)="openModal(item)"
+            >
+              <ion-icon name="settings"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </ion-item>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button (click)="openPage()" >
+    <ion-fab-button (click)="openPage()">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
@@ -80,35 +77,58 @@
             >
           </ion-buttons>
         </ion-toolbar>
-        <ion-chip color="primary">
-        <ion-card-subtitle color="primary" >  {{itemGroup.Name}}</ion-card-subtitle>
-        </ion-chip>
       </ion-header>
       <ion-content>
-
         <ion-list>
-
-
+          <ion-item>
+            <ion-grid>
+              <ion-row>
+                <ion-col size="5">
+                  <ion-label class="recent"> رقم : {{itemGroup.Id}} </ion-label>
+                </ion-col>
+                <ion-col size="7">
+                  <ion-label (click)="UpdateData('Name')" class="recent">
+                    {{itemGroup.Name}}
+                    <ion-icon color="warning" name="create-outline"></ion-icon>
+                  </ion-label>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="5">
+                  <ion-label class="recent" (click)="UpdateData('Sort')">
+                    ترتيب : {{ itemGroup.Sort || 'فارغ' }}
+                    <ion-icon color="warning" name="create-outline"></ion-icon>
+                  </ion-label>
+                </ion-col>
+                <ion-col size="7">
+                  <ion-label (click)="UpdateData('Name')" class="recent">
+                    {{itemGroup.Name}}
+                    <ion-icon color="warning" name="create-outline"></ion-icon>
+                  </ion-label>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
           <ion-item>
             <ion-label>
-              <ion-toggle  [checked]="itemGroup.IsExpire">
-                <h2>استخدام تاريخ الانتهاء</h2>
+              <ion-toggle [checked]="itemGroup.IsExpire">
+                استخدام تاريخ الانتهاء
               </ion-toggle>
             </ion-label>
           </ion-item>
           <ion-item>
             <ion-label>
               <ion-label>
-                <ion-toggle  [checked]="itemGroup.AllowNeg">
-                  <h2>السماح بلكميات السالبة</h2></ion-toggle
+                <ion-toggle [checked]="itemGroup.AllowNeg">
+                  السماح بلكميات السالبة</ion-toggle
                 >
               </ion-label>
             </ion-label>
           </ion-item>
           <ion-item>
             <ion-label>
-              <ion-toggle  [checked]="itemGroup.CostLessSale">
-                <h2>البيع باقل من التكلفة</h2>
+              <ion-toggle [checked]="itemGroup.CostLessSale">
+                البيع باقل من التكلفة
               </ion-toggle>
             </ion-label>
           </ion-item>
@@ -116,5 +136,4 @@
       </ion-content>
     </ng-template>
   </ion-modal>
-  
 </ion-content>
