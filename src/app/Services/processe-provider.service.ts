@@ -66,6 +66,28 @@ export class ProcesseProviderService {
       }
     });
   }
+  async delete(url: string, data: any, message: string): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        this.dialog.showLoading('جاري حذف...');
+        await this.api.postData(url, data).then((data) => {
+          this.dataResponse = data;
+        });
+        if (!this.ResponseCodeServer(this.dataResponse.Code)) {
+          reject(new Error('خطأ في السيرفر'));
+        } else {
+          this.dialog.alertShowError('نجاح', message);
+          resolve(true); 
+        }
+      } catch (error) {
+        this.dialog.hideLoading();
+        this.dialog.alertShowError('خطأ', 'تأكد من اتصالك بالإنترنت');
+        reject(error); // إرجاع الخطأ
+      } finally {
+        this.dialog.hideLoading();
+      }
+    });
+  }
 
   async getByRequireList(url: string, data: any): Promise<any> {
     return new Promise(async (resolve, reject) => {

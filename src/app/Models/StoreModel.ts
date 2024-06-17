@@ -17,6 +17,7 @@ export interface ItemGroupModel {
     ImageLink: string;
     Sort: number;
     ParentId: string;
+    
     LoginId: number;
     SearchText: string;
     EnteredBranchId: number;

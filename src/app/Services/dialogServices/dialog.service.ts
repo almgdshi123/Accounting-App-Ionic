@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { AlertController, LoadingController,MenuController } from '@ionic/angular/standalone';
-import { ServerResponse } from 'src/app/Models/Model';
 
 @Injectable({
   providedIn: 'root'
@@ -52,5 +51,6 @@ export class DialogService {
     async closeMenu() {
       await this.menu.close();
     }
+    
     
 }

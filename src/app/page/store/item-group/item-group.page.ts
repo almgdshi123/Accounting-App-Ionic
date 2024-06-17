@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
   IonContent,
@@ -80,6 +80,7 @@ import { Tarmeez } from '../../../../app/enum/ELookup';
     CommonModule,
     IonThumbnail,
     FormsModule,
+    NgIf,
   ],
 })
 export class ItemGroupPage implements OnInit {
@@ -90,6 +91,11 @@ export class ItemGroupPage implements OnInit {
   ElookupItemGroup: { Name: string; Id: string }[] = [];
   ElookupCurrency: { Name: string; Id: string }[] = [];
   ElookupTarmeez: { Name: string; ItemNo: number }[] = [];
+  ElooKup: { NameParent: string; NameCurrency: string; NameTarmeez: string } = {
+    NameParent: '',
+    NameCurrency: '',
+    NameTarmeez: '',
+  };
 
   data: any;
   isExpire: boolean = false;
@@ -116,11 +122,12 @@ export class ItemGroupPage implements OnInit {
   }
 
   ngOnInit() {}
+
   ionViewDidEnter() {
     this.getItemGroup();
   }
 
-   async getItemGroup() {
+  async getItemGroup() {
     const res = await this.processe.getListAsString('api/ItemGroupApi/GetAll');
     this.itemGroups = res;
     this.getElookup();
@@ -156,18 +163,27 @@ export class ItemGroupPage implements OnInit {
       }
     }
   }
+
   async openModal(item: ItemGroupModel) {
     this.itemGroup = item;
     this.itemGroup.OldId = this.itemGroup.Id;
-
+    this.ElooKup.NameParent =
+      this.ElookupItemGroup.find((x) => x.Id === this.itemGroup.ParentId)
+        ?.Name || ' لم تم الاختيار';
+    this.ElooKup.NameCurrency =
+      this.ElookupCurrency.find(
+        (x) => x.Id == this.itemGroup.StoreCurrencyId.toString()
+      )?.Name || ' لم تم الاختيار';
+    // this.ElooKup.NameTarmeez =this.ElookupTarmeez.find(
+    //   (x) => x.ItemNo === this.itemGroup.i
+    // )
     this.modal.present();
   }
   async UpdateData(title) {
-    let res = '';
     switch (title) {
       case 'Name':
         this.updateDataAlert
-          .updateData('    تعديل اسم المجموعة', this.itemGroup.Name)
+          .updateData('    تعديل اسم المجموعة', this.itemGroup.Name, 'text')
           .then((res) => {
             if (res) this.itemGroup.Name = res;
           });
@@ -175,9 +191,86 @@ export class ItemGroupPage implements OnInit {
 
       case 'Sort':
         this.updateDataAlert
-          .updateData('    تعديل ترتيب المجموعة', this.itemGroup.Sort)
+          .updateData('    تعديل ترتيب المجموعة', this.itemGroup.Sort, 'number')
           .then((res) => {
             if (res) this.itemGroup.Sort = res;
+          });
+        break;
+
+      case 'Parent':
+        this.updateDataAlert
+          .updateData(
+            '    تعديل المجموعة الام',
+            { Id: this.itemGroup.ParentId, DataSelect: this.ElookupItemGroup },
+            'select'
+          )
+          .then((res) => {
+            if (res) {
+              this.itemGroup.ParentId = res.Id;
+
+              this.ElooKup.NameParent = res.Name;
+            }
+          });
+        break;
+
+      case 'Currency':
+        this.updateDataAlert
+          .updateData(
+            '    تعديل العملة',
+            {
+              Id: this.itemGroup.StoreCurrencyId,
+              DataSelect: this.ElookupCurrency,
+            },
+            'select'
+          )
+          .then((res) => {
+            if (res) {
+              this.itemGroup.StoreCurrencyId = res.Id;
+
+              this.ElooKup.NameCurrency = res.Name;
+            }
+          });
+        break;
+      case 'AllowNegForAllItemGroup':
+        if (this.itemGroup.AllowNegForAllItemGroup)
+          this.itemGroup.AllowNegForAllItemGroup = false;
+        else
+          this.updateDataAlert
+            .AlertConfirm(
+              'هل تريد تطبيق خاصة السماح بالكميات السالبة على جميع اصناف هذه المجموعة؟'
+            )
+            .then((res) => {
+              if (res) {
+                this.itemGroup.AllowNegForAllItemGroup = true;
+              }
+            });
+        break;
+      case 'IsNotifyExp':
+        if (this.itemGroup.IsNotifyExp) this.itemGroup.IsNotifyExp = false;
+        else
+          this.updateDataAlert.createPickerDate().then((res) => {
+            if (res) {
+              this.itemGroup.IsNotifyExp = true;
+              this.itemGroup.ExpDay = res.day.value;
+              this.itemGroup.ExpMonth = res.month.value;
+              this.itemGroup.ExpYear = res.year.value;
+            }
+          });
+        break;
+
+      case 'Tarmeez':
+        this.updateDataAlert
+          .updateData(
+            '    تعديل الترميز',
+            {
+              Id: null,
+              DataSelect: this.ElookupTarmeez,
+            },
+            'select'
+          )
+          .then((res) => {
+            if (res) {
+            }
           });
         break;
     }
@@ -195,6 +288,20 @@ export class ItemGroupPage implements OnInit {
 
     this.modal.dismiss();
   }
+  async deleteItem(item) {
+    this.updateDataAlert
+      .AlertConfirm('هل تريد حذف هذه المجموعة؟')
+      .then((res) => {
+        if (res) {
+          this.processe
+            .delete('api/ItemGroupApi/Delete', item, 'تم الحذف بنجاح')
+            .then((res) => {
+              if (res) this.getItemGroup();
+            });
+        }
+      });
+  }
+
   openPage() {
     this.dataService.setData({
       ItemGroup: this.ElookupItemGroup,

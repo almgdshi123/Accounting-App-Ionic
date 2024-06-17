@@ -185,7 +185,6 @@ export class OperationsPagePage implements OnInit {
     },
   ];
 
-  // تأكد من تحديث الدالة generateNumberOptions لتشمل الصفر إذا لم تكن قد فعلت ذلك بالفعل
   generateNumberOptions(start, end, text) {
     let options = [{ text: text, value: '0' }]; // إضافة القيمة صفر
     for (let i = start; i <= end; i++) {
