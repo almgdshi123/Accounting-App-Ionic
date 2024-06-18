@@ -8,7 +8,13 @@ import {
   Validators,
 } from '@angular/forms';
 import { addIcons } from 'ionicons';
-import { checkmark, close } from 'ionicons/icons';
+import {
+  checkmark,
+  close,
+  refreshOutline,
+  settings,
+  trash,
+} from 'ionicons/icons';
 import {
   IonContent,
   IonHeader,
@@ -31,26 +37,28 @@ import {
   IonCol,
   IonRow,
   IonGrid,
-  IonAlert,
-  IonPickerLegacy,
   IonToggle,
   IonText,
+  IonFabButton,
+  IonFab,
+  IonFabList,
 } from '@ionic/angular/standalone';
 import { ItemGroupModel } from 'src/app/Models/StoreModel';
 import { DataService } from 'src/app/Services/dialogServices/data.service';
 import { ProcesseProviderService } from 'src/app/Services/processe-provider.service';
 import { NavService } from 'src/app/Services/dialogServices/nav.service';
-
+import { DialogService } from 'src/app/Services/dialogServices/dialog.service';
 @Component({
   selector: 'app-operations-page',
   templateUrl: './operations-page.page.html',
-  styleUrls: ['./operations-page.page.scss'],
+  styleUrls: ['../../../../../style/operation-page.scss'],
   standalone: true,
   imports: [
+    IonFabList,
+    IonFab,
+    IonFabButton,
     IonText,
     IonToggle,
-    IonPickerLegacy,
-    IonAlert,
     IonGrid,
     NgIf,
     IonRow,
@@ -84,8 +92,8 @@ export class OperationsPagePage implements OnInit {
 
   itemGroupFormGroup: FormGroup = new FormGroup({
     Name: new FormControl('', Validators.required),
-    Sort: new FormControl(''),
-     ParentId: new FormControl(null),
+    Sort: new FormControl(null),
+    ParentId: new FormControl(null),
     StoreCurrencyId: new FormControl(1, Validators.required),
     CostLessSale: new FormControl(false),
     AllowNeg: new FormControl(false),
@@ -105,21 +113,27 @@ export class OperationsPagePage implements OnInit {
   ElookupTarmeez: { Name: string; ItemNo: number }[] = [];
 
   data: any;
-  isAlertOpen = false;
-  IsExpirePickerOpen = false;
 
   constructor(
     private dataService: DataService,
     private processe: ProcesseProviderService,
+    private dialog: DialogService,
     public navService: NavService
   ) {
     addIcons({
       checkmark,
       close,
+      settings,
+      trash,
+      refreshOutline,
     });
   }
 
   ngOnInit() {
+    this.getElookup();
+  }
+
+  getElookup() {
     const data = this.dataService.getData();
 
     if (data) {
@@ -131,59 +145,27 @@ export class OperationsPagePage implements OnInit {
   async save() {
     if (this.itemGroupFormGroup.valid) {
       this.itemGroup = this.itemGroupFormGroup.value;
-      console.log(this.itemGroup);
-      await this.processe
-        .add('api/ItemGroupApi/Add', this.itemGroup, 'تم الحفظ بنجاح')
-        .finally(() => {
-          this.navService.redirectTo('/store/itemGroup');
-        });
+      await this.processe.add(
+        'api/ItemGroupApi/Add',
+        this.itemGroup,
+        'تم الحفظ بنجاح'
+      );
     }
   }
 
-  public alertButtons = [
-    {
-      text: 'الغاء',
-      role: 'cancel',
-    },
-    {
-      text: 'تأكيد',
-      role: 'confirm',
-      handler: () => {
-        this.toggleAllowNegForAllItemGroup();
-      },
-    },
-  ];
-  public durationPickerColumns = [
-    {
-      name: 'ExpDay',
-      options: this.generateNumberOptions(1, 30, 'يوم'),
-    },
-    {
-      name: 'ExpMonth',
-      options: this.generateNumberOptions(1, 12, 'شهر'),
-    },
-    {
-      name: 'ExpYear',
-      options: this.generateNumberOptions(1, 10, 'سنة'),
-    },
-  ];
-  public durationPickerButtons = [
-    {
-      text: 'إلغاء',
-      role: 'cancel',
-    },
-    {
-      text: 'تأكيد',
-      handler: (value) => {
+
+  IsNotifyExp() {
+    this.dialog.createPickerDate().then((res) => {
+      if (res) {
         this.itemGroupFormGroup.patchValue({
           IsNotifyExp: true,
-          ExpDay: value.ExpDay.value,
-          ExpMonth: value.ExpMonth.value,
-          ExpYear: value.ExpYear.value,
+          ExpDay: res.day.value,
+          ExpMonth: res.month.value,
+          ExpYear: res.year.value,
         });
-      },
-    },
-  ];
+      }
+    });
+  }
 
   generateNumberOptions(start, end, text) {
     let options = [{ text: text, value: '0' }]; // إضافة القيمة صفر
@@ -193,15 +175,43 @@ export class OperationsPagePage implements OnInit {
     return options;
   }
   toggleAllowNegForAllItemGroup() {
-    const currentValue = this.itemGroupFormGroup.value.AllowNegForAllItemGroup;
-    this.itemGroupFormGroup.patchValue({
-      AllowNegForAllItemGroup: !currentValue,
+    if (!this.itemGroupFormGroup.value.AllowNegForAllItemGroup) {
+      this.dialog
+        .AlertConfirm(
+          'هل تريد تطبيق خاصة السماح بالكميات السالبة على جميع اصناف هذه المجموعة؟'
+        )
+        .then((res) => {
+          if (res) {
+            this.itemGroupFormGroup.patchValue({
+              AllowNegForAllItemGroup: true,
+            });
+          }
+        });
+    } else {
+      this.itemGroupFormGroup.patchValue({
+        AllowNegForAllItemGroup: false,
+      });
+    }
+  }
+
+  
+  clear() {
+    this.dialog.AlertConfirm('هل تريد افرغ  جميع البيانات؟').then((res) => {
+      if (res) {
+        this.itemGroupFormGroup.reset();
+        this.itemGroupFormGroup.patchValue({
+          StoreCurrencyId: 1,
+        });
+      }
     });
   }
-  setOpen(isOpen: boolean) {
-    this.isAlertOpen = isOpen;
-  }
-  setOpenExpire(isOpen: boolean) {
-    this.IsExpirePickerOpen = isOpen;
+  refresh() {
+    this.dialog.AlertConfirm('هل تريد تحديث البيانات؟').then((res) => {
+      if (res) {
+        this.dataService.getElookupItemGroup().finally(() => {
+          this.getElookup();
+        });
+      }
+    });
   }
 }

@@ -1,0 +1,133 @@
+<ion-content>
+  <ion-header [translucent]="true">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-thumbnail class="menu">
+          <ion-back-button
+            color="primary"
+            mode="md"
+            (click)="navService.back()"
+            defaultHref=""
+          ></ion-back-button>
+        </ion-thumbnail>
+      </ion-buttons>
+      <ion-title color="danger"> اظافة صنف </ion-title>
+      <ion-buttons slot="end">
+        <ion-button
+          expand="block"
+          size="large"
+          color="success"
+          [disabled]="!itemFormGroup.valid"
+          (click)="save()"
+          >حفظ <ion-icon name="checkmark"></ion-icon
+        ></ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  <form [formGroup]="itemFormGroup">
+    <ion-list>
+      <ion-grid>
+        <ion-item>
+          <!-- لم يعمل -->
+          <ion-select
+            formControlName="GroupId"
+            label=" المجموعة "
+            placeholder="  يمكن الاختيار"
+            okText=" تأكيد اختيار المجموعة"
+            cancelText="الغاء"
+          >
+            <ion-select-option
+              *ngFor="let item of ElookupItemGroup"
+              [value]="item.Id"
+              >{{item.Name}}</ion-select-option
+            >
+          </ion-select>
+
+          <ion-button color="light" (click)="openPage('addItemGroup')">
+            <ion-icon slot="icon-only" name="add"></ion-icon>
+          </ion-button>
+          <ion-button color="light" (click)="openPage('viewItemGroup')">
+            <ion-icon name="eye-outline"></ion-icon>
+          </ion-button>
+        </ion-item>
+        <div
+          class="error-validation"
+          *ngIf="itemFormGroup.get('Name')?.hasError('required') && itemFormGroup.get('Name')?.touched"
+        >
+          <p>يجب ادخال اسم الصنف</p>
+        </div>
+        <ion-item>
+          <ion-text color="danger">*</ion-text>
+
+          <ion-input
+            type="text"
+            formControlName="Name"
+            placeholder=" اسم الصنف "
+          >
+            <div slot="end">
+              <ion-text color="danger" *ngIf="!itemFormGroup.get('Name')?.valid"
+                >(مطلوب)</ion-text
+              >
+            </div>
+          </ion-input>
+
+          <ion-input
+            color="danger"
+            label="*"
+            type="text"
+            formControlName="EnName"
+            placeholder=" اسم الصنف انجليزي"
+          >
+          </ion-input>
+        </ion-item>
+       
+        <ion-item>
+          <ion-text         
+          color="danger">*</ion-text>
+
+          <ion-input
+         formControlName="DefaultUnitName"
+          (ionInput)="onSearchChange($event)" 
+          (ionFocus)="openUnitName()" 
+       
+          
+
+
+          placeholder="الوحدة الصغر"
+          clearInput="true"
+          
+          
+          >
+
+        </ion-input>
+
+      
+        
+       
+        </ion-item>
+        <ion-list *ngIf="isUnitNameOpen"   >
+          <ion-item color="light" [button]="true" [detail]="false" *ngFor="let item of ELookupUnitNameSearch" (click)="setUnitName(item.Name)">
+            <div class="item-content">
+              <div class="item-name">{{ item.Name }}</div>
+            </div>
+          </ion-item>
+        </ion-list>
+      </ion-grid>
+    </ion-list>
+  
+  </form>
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button color="light">
+      <ion-icon name="settings"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="top">
+      <ion-fab-button color="tertiary" (click)="refresh()">
+        <ion-icon name="refresh-outline"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button color="danger" shape="round" (click)="clear()">
+        <ion-icon name="trash"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
+</ion-content>

@@ -34,3 +34,78 @@ export interface ItemGroupModel {
     IsScaleForAllItem: boolean;
   }
   
+  export interface ItemModel{
+    Id: string;
+    NavigationTypeId: number;
+    IdCol: string;
+    OrderBy: string;
+    IntId: string;
+    Name: string;
+    MinVal: number;
+    DefaultUnitId: number;
+    IsExpire: boolean;
+    IsComplex: boolean;
+    IsService: boolean;
+    AllowNeg: boolean;
+    CostLessSale: boolean;
+    SystemId: number;
+    LoginId: number;
+    EnteredBranchId: number;
+    UnitName: string;
+    PriceB: number;
+    MinPriceS: number;
+    PriceS: number;
+    MaxPriceS: number;
+    CurrencyId: number;
+    Barcode: string;
+    ExpDay: number;
+    ExpMonth: number;
+    ExpYear: number;
+    IsNotifyExp: boolean;
+    UseVat: boolean;
+    IsTaxIncluded: boolean;
+    ImageLink: string;
+    UseComm: boolean;
+    CommRate: number;
+    SearchText: string;
+    GroupIdFrom: string;
+    GroupIdTo: string;
+    SortBy: number;
+    GroupId: string;
+    ItemIdFrom: string;
+    ItemIdTo: string;
+    StoreId: number;
+    BranchId: number;
+    Sort: number;
+    TailorEq: number;
+    DefaultExpDate: Date; // Assuming dateTime translates to Date type in TypeScript
+    AccountId: string;
+    StoreCurrencyId: number;
+    OldId: string;
+    IsAutoGenerate: boolean;
+    AvgCostAtCurrentVal: boolean; 
+    CurrentCurrencyId:number; 
+     CurrentCurrencyVal:number; 
+     VatTypeId:number; 
+     IsPursh:boolean; 
+     IsSale:boolean; 
+     IsSerialNo:boolean; 
+     UseVatPrecent100:boolean; 
+     VatTypeIdPrecent100:number; 
+     ItemDefaultPrinter:string; 
+     AllowNegForAllItem:boolean; 
+     OldBarcode:string; 
+     SpecialPriceS:number; 
+     WholePriceS:number; 
+     CommKindId:number; 
+     CommVal:number; 
+     PeriodId:number; 
+     IsScale:boolean; 
+     Estate:number; 
+     GroupName:string; 
+     DefaultUnitName:string; 
+     Available:number; 
+     CurrencyCode:string; 
+     ShowOnlyPositiveItem:boolean
+  }
+   

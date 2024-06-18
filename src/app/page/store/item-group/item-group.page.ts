@@ -45,7 +45,7 @@ import { ItemGroupModel } from 'src/app/Models/StoreModel';
 import { DataService } from 'src/app/Services/dialogServices/data.service';
 import { ProcesseProviderService } from 'src/app/Services/processe-provider.service';
 import { UpdateDataAlertService } from 'src/app/Services/dialogServices/update-data-alert.service';
-import { Tarmeez } from '../../../../app/enum/ELookup';
+import { DialogService } from 'src/app/Services/dialogServices/dialog.service';
 @Component({
   selector: 'app-item-group',
   templateUrl: './item-group.page.html',
@@ -108,6 +108,7 @@ export class ItemGroupPage implements OnInit {
     private updateDataAlert: UpdateDataAlertService,
     private router: Router,
     private dataService: DataService,
+    private dialog: DialogService,
     private processe: ProcesseProviderService
   ) {
     addIcons({
@@ -130,41 +131,21 @@ export class ItemGroupPage implements OnInit {
   async getItemGroup() {
     const res = await this.processe.getListAsString('api/ItemGroupApi/GetAll');
     this.itemGroups = res;
-    this.getElookup();
   }
   async getElookup() {
-    this.ElookupItemGroup = [];
+    await this.dataService.getElookupItemGroup().finally(() => {
+      const data = this.dataService.getData();
 
-    if (this.itemGroups) {
-      this.ElookupItemGroup = this.itemGroups.map((element) => ({
-        Name: element.Name,
-        Id: element.Id,
-      }));
-
-      if (this.ElookupCurrency.length === 0) {
-        const currencyData = await this.processe.getListAsString(
-          'api/CurrencyApi/GetAll'
-        );
-        this.ElookupCurrency = currencyData.map((item) => ({
-          Name: item.Name,
-          Id: item.Id,
-        }));
+      if (data) {
+        this.ElookupItemGroup = data['ItemGroup'];
+        this.ElookupCurrency = data['Currency'];
+        this.ElookupTarmeez = data['Tarmeez'];
       }
-
-      if (this.ElookupTarmeez.length === 0) {
-        const tarmeezData = await this.processe.getByRequireList(
-          'api/TarmeezApi/GetTarmeezByGroupAndRequireList',
-          Tarmeez
-        );
-        this.ElookupTarmeez = tarmeezData.map((item) => ({
-          Name: item.Name,
-          ItemNo: item.ItemNo,
-        }));
-      }
-    }
+    });
   }
 
   async openModal(item: ItemGroupModel) {
+    this.getElookup();
     this.itemGroup = item;
     this.itemGroup.OldId = this.itemGroup.Id;
     this.ElooKup.NameParent =
@@ -235,7 +216,7 @@ export class ItemGroupPage implements OnInit {
         if (this.itemGroup.AllowNegForAllItemGroup)
           this.itemGroup.AllowNegForAllItemGroup = false;
         else
-          this.updateDataAlert
+          this.dialog
             .AlertConfirm(
               'هل تريد تطبيق خاصة السماح بالكميات السالبة على جميع اصناف هذه المجموعة؟'
             )
@@ -248,7 +229,7 @@ export class ItemGroupPage implements OnInit {
       case 'IsNotifyExp':
         if (this.itemGroup.IsNotifyExp) this.itemGroup.IsNotifyExp = false;
         else
-          this.updateDataAlert.createPickerDate().then((res) => {
+          this.dialog.createPickerDate().then((res) => {
             if (res) {
               this.itemGroup.IsNotifyExp = true;
               this.itemGroup.ExpDay = res.day.value;
@@ -289,7 +270,7 @@ export class ItemGroupPage implements OnInit {
     this.modal.dismiss();
   }
   async deleteItem(item) {
-    this.updateDataAlert
+    this.dialog
       .AlertConfirm('هل تريد حذف هذه المجموعة؟')
       .then((res) => {
         if (res) {
@@ -303,12 +284,9 @@ export class ItemGroupPage implements OnInit {
   }
 
   openPage() {
-    this.dataService.setData({
-      ItemGroup: this.ElookupItemGroup,
-      Currency: this.ElookupCurrency,
-      Tarmeez: this.ElookupTarmeez,
+    this.dataService.getElookupItemGroup().finally(() => {
+      this.router.navigate(['store/itemGroup/operationsPage']);
     });
-
-    this.router.navigate(['store/itemGroup/operationsPage']);
   }
+  
 }

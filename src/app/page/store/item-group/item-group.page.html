@@ -64,14 +64,13 @@
   </ion-fab>
   <ion-modal
     #modal
-    [initialBreakpoint]="1"
-    [breakpoints]="[1, 0.9, 0.9, 0.9]"
   >
     <ng-template>
 
       <ion-header>
         <ion-toolbar>
           <ion-buttons slot="start">
+            <ion-button (click)="modal.dismiss()">الغاء  </ion-button>
             </ion-buttons>
           <ion-title>الاعدادات</ion-title>
           <ion-buttons slot="end">

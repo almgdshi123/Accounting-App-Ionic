@@ -18,8 +18,16 @@ export const routes: Routes = [
   {
     path: 'itemGroup/operationsPage',
     loadComponent: () => import('./item-group/operations-page/operations-page.page').then( m => m.OperationsPagePage),
-    canActivate:[dialogGuard]
 
+  },
+  {
+    path: 'item',
+    loadComponent: () => import('./item/item.page').then( m => m.ItemPage)
+  },
+  {
+    path: 'item/operationsPage',
+    loadComponent: () => import('./item/operations-page/operations-page.page').then( m => m.OperationsPagePage)
+    
   },
 
 
