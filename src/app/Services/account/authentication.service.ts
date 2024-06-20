@@ -60,6 +60,10 @@ export class AuthenticationService {
   }
   get username() {
     let tokenDecoded = this.jwtHelper.decodeToken(this.token);
-    return tokenDecoded?.unique_name;
+    return tokenDecoded?.Name;
+  }
+  public get IdUser() {
+    let tokenDecoded = this.jwtHelper.decodeToken(this.token);
+    return tokenDecoded?.Id;
   }
 }

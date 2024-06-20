@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ProcesseProviderService } from '../processe-provider.service';
 import { Tarmeez } from 'src/app/enum/ELookup';
+import { AuthenticationService } from '../account/authentication.service';
 
 @Injectable({
   providedIn: 'root',
@@ -46,6 +47,10 @@ export class DataService {
   async getElookupItem() {
     let ElookupItemGroup: { Name: string; Id: string }[] = [];
     let ELookupUnitName: { Name: string }[] = [];
+    let ElookupCurrency: { Name: string; Id: string }[] = [];
+    let ElookupTarmeez: { Name: string; Id: number }[] = [];
+
+
     
     const itemGroupData = await this.processe.getListAsString(
       'api/ItemGroupApi/GetAll'
@@ -61,9 +66,26 @@ export class DataService {
     ELookupUnitName = unitNameData.map((element) => ({
       Name: element.Name,
     }));
+    const currencyData = await this.processe.getListAsString(
+      'api/CurrencyApi/GetAll'
+    );
+    ElookupCurrency = currencyData.map((item) => ({
+      Name: item.Name,
+      Id: item.Id,
+    }));
+    const tarmeezData = await this.processe.getByRequireList(
+      'api/TarmeezApi/GetTarmeezByGroupAndRequireList',
+      Tarmeez
+    );
+    ElookupTarmeez = tarmeezData.map((item) => ({
+      Name: item.Name,
+      Id: item.ItemNo,
+    }));
     this.setData({
       ItemGroup: ElookupItemGroup,
       UnitName: ELookupUnitName,
+      Currency: ElookupCurrency,
+      Tarmeez: ElookupTarmeez,
     })
     
 
@@ -78,4 +100,8 @@ export class DataService {
     const temp = this.data;
     return temp;
   }
+  // getUserData() {
+  //   const temp = {LoginId:this.auth.IdUser};
+  //   return temp;
+  // }
 }
